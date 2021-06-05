@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RangeSlider from './RangeSlider';
+import VerticalRangeSlider from './VerticalRangeSlider';
 import './global.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <RangeSlider min={235} max={1090} decimals={0} step={0} width="500px" primaryColor="hsl(196, 100%, 48%)" />
+    <VerticalRangeSlider min={-5} max={100} decimals={0} step={0} height="400px" primaryColor="hsl(196, 100%, 48%)" />
   </React.StrictMode>,
   document.getElementById('root')
 );

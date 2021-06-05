@@ -4,7 +4,7 @@ import styled from 'styled-components';
 let fillColor = "";
 let newValue = "";
 
-const RangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, width = "250px", primaryColor = "black" }) => {
+const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, height = "250px", primaryColor = "black" }) => {
   const rangeEl = useRef(null);
   const [value, setValue] = useState((min + max) / 2);
   const [isFocused, setIsFocused] = useState(false);
@@ -18,7 +18,7 @@ const RangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, width = "250p
   }, [])
 
   return (
-    <RangeWrap style={{ width: width}}>
+    <RangeWrap style={{ width: height}}>
       <RangeOutput
         focused={isFocused}
         style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
@@ -47,21 +47,24 @@ const RangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, width = "250p
   );
 };
 
-export default RangeSlider;
+export default VerticalRangeSlider;
 
 const whiteColor = "white";
 const blackColor = "#999";
 
 const RangeWrap = styled.div`
-  border: 3px dotted red;
   position: relative;
-  margin-top: 2rem;
+  margin-top: 5rem;
+  margin-left: -15rem;
+  transform: rotate(270deg);
+  transform-origin: 75%;
 `;
 
 const RangeOutput = styled.div`
   font-family: sans-serif;
   position: absolute;
-  margin-top: -2rem;
+  margin-top: 3.5rem;
+  margin-left: -2.5%;
   left: 50%;
   border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
   background: ${p => p.focused ? fillColor : whiteColor};
@@ -74,6 +77,7 @@ const RangeOutput = styled.div`
   transform: translate(-50%, 0);
   border-radius: 5px;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
+  transform: rotate(90deg);
   transition: all 0.15s ease-out;
 `;
 
