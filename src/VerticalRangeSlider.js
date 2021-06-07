@@ -6,7 +6,7 @@ let blurColor = "";
 let newValue = "";
 let selectedValue = "";
 
-const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, width = "250px", primaryColor = "black", primaryColor50 }) => {
+const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, height = "250px", primaryColor = "black", primaryColor50 }) => {
   const rangeEl = useRef(null);
   const [value, setValue] = useState((min + max) / 2);
   const [isFocused, setIsFocused] = useState(false);
@@ -26,9 +26,9 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, width
   }, [value, max]);
 
   let markers = [];
-  for (let i = min; i <= max; i+=step){
+  for (let i = min; i <= max; i += step) {
     console.log(i);
-    markers.push(<Tick>{i}</Tick>);
+    markers.push(<Tick><span>{i}</span></Tick>);
   }
   const marks = markers.map(marker => marker);
 
@@ -53,12 +53,12 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, width
 
 
       case 37: //Left
-        (cmd || ctrl) &&  setValue(value - factor);
+        (cmd || ctrl) && setValue(value - factor);
         return;
 
 
       case 40: //Down
-        (cmd || ctrl) &&  setValue(value - factor);
+        (cmd || ctrl) && setValue(value - factor);
         return;
 
 
@@ -80,7 +80,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, width
   }
 
   return (
-    <RangeWrap style={{ width: width }}>
+    <RangeWrap style={{ width: height }}>
       <RangeOutput
         focused={isFocused}
         style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
@@ -233,17 +233,24 @@ const Progress = styled.div`
 
 const Ticks = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  position: relative;
+  top: -3rem;;
 `;
 
-const Tick = styled.span`
+const Tick = styled.div`
   position: relative;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   width: 1px;
   background: ${blackColor};
-  height: 5px;
+  height: 45px;
   line-height: 30px;
-  top: -1rem;
-  margin-bottom: 20px
+  top: -2rem;
+  margin-bottom: 20px;
+  /* transform: rotate(90deg); */
+  span{
+    transform: rotate(90deg);
+  }
 `;

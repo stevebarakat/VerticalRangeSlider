@@ -5,10 +5,11 @@ import './global.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <VerticalRangeSlider min={35452}
-      max={106780}
+    <VerticalRangeSlider 
+      min={0}
+      max={100}
+      step={10}
       decimals={0}
-      step={5000}
       height="500px"
       primaryColor="hsl(196, 100%, 48%)"
       primaryColor50="hsla(196, 100%, 48%, 0.5)"

@@ -131,3 +131,8 @@ table {
 * {
   box-sizing: border-box;
 }
+
+body {
+  background: #fff;
+  padding: 20%;
+}
