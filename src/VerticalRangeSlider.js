@@ -234,8 +234,8 @@ const Progress = styled.div`
 const Ticks = styled.div`
   display: flex;
   justify-content: space-around;
-  margin-right: -1%;
-  margin-left: -1%;
+  margin-right: 0.1%;
+  margin-left: 0.1%;
   position: relative;
   top: -3rem;
 `;
@@ -250,8 +250,6 @@ const Tick = styled.div`
   height: 45px;
   line-height: 30px;
   top: -2rem;
-  margin-bottom: 20px;
-  /* transform: rotate(90deg); */
   span{
     transform: rotate(90deg);
   }

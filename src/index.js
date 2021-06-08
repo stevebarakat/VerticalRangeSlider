@@ -6,8 +6,8 @@ import './global.css';
 ReactDOM.render(
   <React.StrictMode>
     <VerticalRangeSlider 
-      min={0}
-      max={100}
+      min={114}
+      max={254}
       step={10}
       decimals={0}
       height="500px"
