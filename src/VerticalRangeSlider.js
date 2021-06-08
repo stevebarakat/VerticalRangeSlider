@@ -134,7 +134,7 @@ const RangeOutput = styled.div`
   font-family: sans-serif;
   position: absolute;
   margin-top: 3.5rem;
-  margin-left: -1rem;
+  margin-left: -4%;
   left: 50%;
   border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
