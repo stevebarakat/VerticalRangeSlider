@@ -134,7 +134,7 @@ const RangeOutput = styled.div`
   font-family: sans-serif;
   position: absolute;
   margin-top: 3.5rem;
-  margin-left: -2.5%;
+  margin-left: -1rem;
   left: 50%;
   border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
@@ -233,9 +233,11 @@ const Progress = styled.div`
 
 const Ticks = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  margin-right: -1%;
+  margin-left: -1%;
   position: relative;
-  top: -3rem;;
+  top: -3rem;
 `;
 
 const Tick = styled.div`
