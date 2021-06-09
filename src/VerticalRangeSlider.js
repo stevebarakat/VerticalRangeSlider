@@ -169,18 +169,23 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
   appearance: none;
   margin: 20px 0;
   width: 100%;
-  border-radius: 25px;
+  height: 15px;
+  border-radius: 15px;
+  border: 1px solid #000;
+  position: relative;
+  z-index: 1;
+  background: transparent;
   &:focus {
     outline: none;
   }
-  &::-webkit-slider-runnable-track {
+  /* &::-webkit-slider-runnable-track {
     width: 15px;
     height: 15px;
     cursor: pointer;
     background: transparent;
     border-radius: 25px;
     box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    z-index: 1;
   }
   &::-moz-range-runnable-track {
     width: 15px;
@@ -189,25 +194,24 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     background: transparent;
     border-radius: 25px;
     box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    z-index: ;
   }
   &:focus::-webkit-slider-runnable-track{
     background: whiteColor;
   }
   &:focus::-moz-range-runnable-track{
     background: whiteColor;
-  }
+  } */
 
   &::-webkit-slider-thumb {
-    position: relative;
+    /* position: relative; */
     height: 2.2rem;
     width: 2.2rem;
     border-radius: 50%;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
     cursor: pointer;
     -webkit-appearance: none;
-    margin-top: -10px;
-    z-index: 999;
+    z-index: 50;
     background-color: white;
     background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
   }
@@ -219,10 +223,9 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
     cursor: pointer;
     -webkit-appearance: none;
-    margin-top: -10px;
-    z-index: 999;
+    z-index: 50;
     background-color: white;
-    background: -webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%);
+    background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
   }
   &:focus::-webkit-slider-thumb {
     background: ${p => p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
@@ -240,7 +243,6 @@ const Progress = styled.div`
   border-radius: 25px;
   position: absolute;
   top: 20px;
-  z-index: 0;
   cursor: pointer;
   /* transition: width 0.1s; */
 `;
