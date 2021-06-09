@@ -149,14 +149,14 @@ const RangeWrap = styled.div`
 const RangeOutput = styled.div`
   position: absolute;
   margin-top: 3.5rem;
-  margin-left: -0.9rem;
+  margin-left: -0.85rem;
   border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
   color: ${p => p.focused ? whiteColor : blackColor};
-  /* line-height: 1.75rem; */
   text-align: left;
-  padding: 0.75rem 0.25rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.25rem;
   font-size: 1rem;
+  /* line-height: 1.5rem; */
   display: block;
   border-radius: 5px;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
