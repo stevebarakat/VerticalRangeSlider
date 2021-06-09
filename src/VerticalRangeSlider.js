@@ -134,7 +134,7 @@ const RangeOutput = styled.div`
   font-family: sans-serif;
   position: absolute;
   margin-top: 3.5rem;
-  margin-left: -4%;
+  margin-left: -1.2rem;
   left: 50%;
   border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
@@ -233,23 +233,23 @@ const Progress = styled.div`
 
 const Ticks = styled.div`
   display: flex;
-  justify-content: space-around;
-  margin-right: 0.1%;
-  margin-left: 0.1%;
+  justify-content: space-between;
+  margin-right: ${newValue - 100 / 2 * -0.02 + "rem"};
+  margin-left: ${newValue - 100 / 2 * -0.02 + "rem"};;
   position: relative;
   top: -3rem;
 `;
 
 const Tick = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  position: relative;
+  justify-content: center;
   width: 1px;
   background: ${blackColor};
-  height: 45px;
-  line-height: 30px;
+  height: 5px;
   top: -2rem;
+
   span{
     transform: rotate(90deg);
   }

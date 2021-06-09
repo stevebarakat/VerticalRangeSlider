@@ -10,7 +10,7 @@ ReactDOM.render(
       max={254}
       step={10}
       decimals={0}
-      height="500px"
+      height="300px"
       primaryColor="hsl(196, 100%, 48%)"
       primaryColor50="hsla(196, 100%, 48%, 0.5)"
     />
