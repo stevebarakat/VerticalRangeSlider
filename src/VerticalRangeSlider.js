@@ -149,18 +149,17 @@ const RangeWrap = styled.div`
 const RangeOutput = styled.div`
   position: absolute;
   margin-top: 3.5rem;
-  margin-left: -0.9rem;
+  margin-left: -0.8rem;
   border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
   color: ${p => p.focused ? whiteColor : blackColor};
-  /* line-height: 1.75rem; */
   text-align: left;
   padding: 0.75rem 0.25rem;
   font-size: 1rem;
   display: block;
   border-radius: 5px;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
-  writing-mode: vertical-rl;
+  writing-mode: vertical-lr;
   transition: all 0.15s ease-out;
   white-space: nowrap;
 `;
@@ -208,7 +207,7 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     transition: all 0.15s ease-out;
   }
   &:focus::-moz-range-thumb {
-    background: ${p => p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
+    background: ${p => p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
     transition: all 0.15s ease-out;
   }
 `;
@@ -241,10 +240,11 @@ const Tick = styled.div`
   width: 1px;
   background: ${blackColor};
   height: 5px;
+  margin-top: -0.5rem;
   span {
-    /* transform: rotate(90deg); */
     writing-mode: vertical-rl;
-    margin-left: 0.5rem;
+    margin-left: 0.4rem;
+    margin-bottom: 0.5rem;
     /* margin-bottom: ${p => p.labelLength + p.decimals + p.prefix.length + p.suffix.length + "ch"}; */
   }
 `;
