@@ -25,12 +25,19 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
     }
   }, [value, max]);
 
+
+
+
   let markers = [];
   for (let i = min; i <= max; i += step) {
     console.log(i);
     markers.push(<Tick><span>{i}</span></Tick>);
   }
   const marks = markers.map(marker => marker);
+
+
+
+
 
   function handleKeyPress(e) {
     rangeEl.current.focus();
@@ -80,7 +87,10 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   }
 
   return (
-    <RangeWrap style={{ width: height }}>
+    <RangeWrap
+      style={{
+        width: height,
+      }}>
       <RangeOutput
         focused={isFocused}
         style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
@@ -124,18 +134,19 @@ const blackColor = "#999";
 
 const RangeWrap = styled.div`
   position: relative;
-  margin-top: 5rem;
-  margin-left: -9rem;
+  top: 1100px;
+  margin: 0 3rem;
   transform: rotate(270deg);
-  transform-origin: 75%;
+  transform-origin: top left;
+  background: pink;
 `;
 
 const RangeOutput = styled.div`
   font-family: sans-serif;
   position: absolute;
-  margin-top: 3.5rem;
-  margin-left: -1.2rem;
-  left: 50%;
+  margin-top: 2.5rem;
+  /* margin-right: ${newValue - 100 / 2 * 0.04 + "rem"};
+  margin-left: ${newValue - 100 / 2 * 0.04 + "rem"}; */
   border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
   color: ${p => p.focused ? whiteColor : blackColor};
@@ -144,11 +155,11 @@ const RangeOutput = styled.div`
   padding: 0.15rem 0.5rem;
   font-size: 1rem;
   display: block;
-  transform: translate(-50%, 0);
   border-radius: 5px;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
   transform: rotate(90deg);
-  transition: all 0.15s ease-out;
+  transform-origin: left;
+  transition: all 0.15s ease-out
 `;
 
 const StyledRangeSlider = styled.input.attrs({ type: "range" })`
@@ -235,7 +246,7 @@ const Ticks = styled.div`
   display: flex;
   justify-content: space-between;
   margin-right: ${newValue - 100 / 2 * -0.02 + "rem"};
-  margin-left: ${newValue - 100 / 2 * -0.02 + "rem"};;
+  margin-left: ${newValue - 100 / 2 * -0.02 + "rem"};
   position: relative;
   top: -3rem;
 `;
@@ -249,8 +260,11 @@ const Tick = styled.div`
   background: ${blackColor};
   height: 5px;
   top: -2rem;
-
-  span{
+  /* transform: rotate(90deg); */
+  /* margin-right: ${newValue - 100 / 2 * -0.02 + "rem"};
+  margin-left: ${newValue - 100 / 2 * -0.02 + "rem"}; */
+  span {
     transform: rotate(90deg);
+    margin-bottom: 100px;
   }
 `;
