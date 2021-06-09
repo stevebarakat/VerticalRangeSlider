@@ -27,11 +27,14 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
 
 
 
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
   let markers = [];
   for (let i = min; i <= max; i += step) {
     const labelLength = i.toString().length;
-    markers.push(<Tick key={i} decimals={decimals} length={labelLength} prefix={prefix} suffix={suffix}><span style={{whiteSpace: "nowrap"}}>{prefix + i.toFixed(decimals) + " " + suffix}</span></Tick>);
+    markers.push(<Tick key={i} decimals={decimals} length={labelLength} prefix={prefix} suffix={suffix}><span style={{whiteSpace: "nowrap"}}>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</span></Tick>);
   }
   const marks = markers.map(marker => marker);
 
@@ -94,7 +97,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
           className="range-value"
         >
-          {prefix + value.toFixed(decimals) + " " + suffix}
+          {prefix + numberWithCommas(value.toFixed(decimals)) + " " + suffix}
         </RangeOutput>
         <StyledRangeSlider
           heightVal={height}
@@ -150,7 +153,7 @@ const RangeOutput = styled.div`
   position: absolute;
   margin-top: 3.5rem;
   margin-left: -0.85rem;
-  border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
+  border: ${p => p.focused ? `1px solid ${focusColor}` : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
   color: ${p => p.focused ? whiteColor : blackColor};
   text-align: left;
@@ -159,7 +162,7 @@ const RangeOutput = styled.div`
   /* line-height: 1.5rem; */
   display: block;
   border-radius: 5px;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.35);
   writing-mode: vertical-rl;
   transition: all 0.15s ease-out;
   white-space: nowrap;
@@ -178,30 +181,6 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
   &:focus {
     outline: none;
   }
-  /* &::-webkit-slider-runnable-track {
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
-    background: transparent;
-    border-radius: 25px;
-    box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.5);
-    z-index: 1;
-  }
-  &::-moz-range-runnable-track {
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
-    background: transparent;
-    border-radius: 25px;
-    box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.5);
-    z-index: ;
-  }
-  &:focus::-webkit-slider-runnable-track{
-    background: whiteColor;
-  }
-  &:focus::-moz-range-runnable-track{
-    background: whiteColor;
-  } */
 
   &::-webkit-slider-thumb {
     /* position: relative; */
@@ -232,7 +211,7 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     transition: all 0.15s ease-out;
   }
   &:focus::-moz-range-thumb {
-    background: ${p => p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
+    background: ${p => p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
     transition: all 0.15s ease-out;
   }
 `;
