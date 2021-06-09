@@ -30,8 +30,8 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
 
   let markers = [];
   for (let i = min; i <= max; i += step) {
-    console.log(i);
-    markers.push(<Tick><span>{i}</span></Tick>);
+    const labelLength = i.toString().length;
+    markers.push(<Tick key={i} length={labelLength}><span>{i}</span></Tick>);
   }
   const marks = markers.map(marker => marker);
 
@@ -87,43 +87,42 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   }
 
   return (
-    <RangeWrap
-      style={{
-        width: height,
-      }}>
-      <RangeOutput
-        focused={isFocused}
-        style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
-        className="range-value"
-      >
-        {value.toFixed(decimals)}
-        {/* {value > max ? max : value.toFixed(decimals)} */}
-      </RangeOutput>
-      <StyledRangeSlider
-        list="tickmamrks"
-        ref={rangeEl}
-        min={min}
-        max={max}
-        step={step}
-        value={value > max ? max : value.toFixed(decimals)}
-        onInput={(e) => {
-          rangeEl.current.focus();
-          setValue(e.target.valueAsNumber);
-        }}
-        onKeyDown={handleKeyPress}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        focused={isFocused}
-      />
-      <Ticks>
-        {marks}
-      </Ticks>
-      <Progress
-        onClick={e => console.log(e)}
-        focused={isFocused}
-        style={{ width: `calc(${newValue}% + (${newPosition / 10}rem))` }}
-      />
-    </RangeWrap>
+    <RangeWrapWrap heightVal={height}>
+      <RangeWrap heightVal={height}>
+        <RangeOutput
+          focused={isFocused}
+          style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
+          className="range-value"
+        >
+          {value.toFixed(decimals)}
+        </RangeOutput>
+        <StyledRangeSlider
+          heightVal={height}
+          list="tickmamrks"
+          ref={rangeEl}
+          min={min}
+          max={max}
+          step={step}
+          value={value > max ? max : value.toFixed(decimals)}
+          onInput={(e) => {
+            rangeEl.current.focus();
+            setValue(e.target.valueAsNumber);
+          }}
+          onKeyDown={handleKeyPress}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          focused={isFocused}
+        />
+        <Ticks>
+          {marks}
+        </Ticks>
+        <Progress
+          onClick={e => console.log(e)}
+          focused={isFocused}
+          style={{ width: `calc(${newValue}% + (${newPosition / 10}rem))` }}
+        />
+      </RangeWrap>
+    </RangeWrapWrap>
   );
 };
 
@@ -132,21 +131,24 @@ export default VerticalRangeSlider;
 const whiteColor = "white";
 const blackColor = "#999";
 
+const RangeWrapWrap = styled.div`
+  height: ${p => p.heightVal};
+`
 const RangeWrap = styled.div`
   position: relative;
-  top: 1100px;
+  top: ${p => p.heightVal};
   margin: 0 3rem;
   transform: rotate(270deg);
   transform-origin: top left;
   background: pink;
+  width: ${p => p.heightVal};
+  height: auto;
 `;
 
 const RangeOutput = styled.div`
   font-family: sans-serif;
   position: absolute;
   margin-top: 2.5rem;
-  /* margin-right: ${newValue - 100 / 2 * 0.04 + "rem"};
-  margin-left: ${newValue - 100 / 2 * 0.04 + "rem"}; */
   border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
   color: ${p => p.focused ? whiteColor : blackColor};
@@ -159,7 +161,7 @@ const RangeOutput = styled.div`
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
   transform: rotate(90deg);
   transform-origin: left;
-  transition: all 0.15s ease-out
+  transition: all 0.15s ease-out;
 `;
 
 const StyledRangeSlider = styled.input.attrs({ type: "range" })`
@@ -259,12 +261,8 @@ const Tick = styled.div`
   width: 1px;
   background: ${blackColor};
   height: 5px;
-  top: -2rem;
-  /* transform: rotate(90deg); */
-  /* margin-right: ${newValue - 100 / 2 * -0.02 + "rem"};
-  margin-left: ${newValue - 100 / 2 * -0.02 + "rem"}; */
   span {
     transform: rotate(90deg);
-    margin-bottom: 100px;
+    margin-bottom: ${p => p.length * 2 + 1 + "ch"};
   }
 `;
