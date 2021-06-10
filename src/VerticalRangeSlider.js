@@ -133,9 +133,11 @@ export default VerticalRangeSlider;
 const whiteColor = "white";
 const blackColor = "#999";
 const RangeWrapWrap = styled.div`
-  width: ${p => p.outputWidth * 2 + 60 + "px"};
+  width: ${p => p.outputWidth * 2 + 40 + "px"};
   padding-left: ${p => p.outputWidth -60 + "px"};
   height: 100vh;
+  background: pink;
+  border: 1px solid black;
 `
 const RangeWrap = styled.div`
   position: relative;
