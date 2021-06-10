@@ -19,6 +19,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   const newPosition = 10 - newValue * 0.2;
   
   useLayoutEffect(() => {
+    
     setOutputWidth(outputEl.current.clientHeight);
     rangeEl.current.focus();
     if (value > max) {
@@ -123,7 +124,7 @@ const RangeWrapWrap = styled.div`
 `;
 const RangeWrap = styled.div`
   width: ${p => p.heightVal};
-  margin-left: ${p => p.outputWidth + "px"};
+  margin-left: ${p => p.outputWidth - 20 + "px"};
   transform: rotate(270deg);
   transform-origin: top left;
   margin-top: ${p => p.heightVal};
@@ -158,7 +159,7 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
   height: 15px;
   border-radius: 15px;
   border: 1px solid ${blackColor};
-  background: white;
+  background: transparent;
   z-index: 1;
   &:focus {
     outline: none;
