@@ -19,7 +19,6 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   const newPosition = 10 - newValue * 0.2;
   
   useLayoutEffect(() => {
-    console.log(outputEl.current.clientHeight);
     setOutputWidth(outputEl.current.clientHeight);
     rangeEl.current.focus();
     if (value > max) {
@@ -29,16 +28,17 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
     }
   }, [value, max]);
 
+
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   let markers = [];
   for (let i = min; i <= max; i += step) {
-    markers.push(<Tick key={i}><span style={{whiteSpace: "nowrap"}}>{prefix + i.toFixed(decimals) + " " + suffix}</span></Tick>);
+    // console.log(numberWithCommas(i).length + prefix.length + suffix.length + decimals);
+    markers.push(<Tick key={i}><span style={{whiteSpace: "nowrap", display: "inline-block"}}>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</span></Tick>);
   }
   const marks = markers.map(marker => marker);
-
-
-
-
-
   function handleKeyPress(e) {
     rangeEl.current.focus();
 
@@ -55,47 +55,33 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
       case 27: //Esc
         rangeEl.current.blur();
         return;
-
-
-
-
       case 37: //Left
         (cmd || ctrl) && setValue(value - factor);
         return;
-
-
       case 40: //Down
         (cmd || ctrl) && setValue(value - factor);
         return;
-
-
       case 38: //Up
         (cmd || ctrl) && setValue(value >= max ? max : value + factor);
         return;
-
-
       case 39: //Right
         (cmd || ctrl) && setValue(value >= max ? max : value + factor);
         return;
-
-
-
-
       default:
         return;
     }
   }
 
   return (
-    <RangeWrapWrap outputWidth={outputWidth}>
-      <RangeWrap heightVal={height}>
+    <RangeWrapWrap outputWidth={outputWidth}  heightVal={height}>
+      <RangeWrap outputWidth={outputWidth} heightVal={height}>
         <RangeOutput
           ref={outputEl}
           focused={isFocused}
           style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))`}}
           className="range-value"
         >
-          {prefix + value.toFixed(decimals) + " " + suffix}
+          {prefix + numberWithCommas(value.toFixed(decimals)) + " " + suffix}
         </RangeOutput>
         <StyledRangeSlider
           heightVal={height}
@@ -106,10 +92,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           step={step}
           value={value > max ? max : value.toFixed(decimals)}
           onClick={() => rangeEl.current.focus()}
-          onInput={(e) => {
-            // rangeEl.current.focus();
-            setValue(e.target.valueAsNumber);
-          }}
+          onInput={(e) => {setValue(e.target.valueAsNumber)}}
           onKeyDown={handleKeyPress}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -130,22 +113,22 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
 
 export default VerticalRangeSlider;
 
-const whiteColor = "white";
+const whiteColor = "#FFF";
 const blackColor = "#999";
 const RangeWrapWrap = styled.div`
   width: ${p => p.outputWidth * 2 + 40 + "px"};
-  padding-left: ${p => p.outputWidth -60 + "px"};
-  height: 100vh;
+  height: ${p => p.heightVal};
   background: pink;
   border: 1px solid black;
-`
+`;
 const RangeWrap = styled.div`
-  position: relative;
-  top: ${p => p.heightVal};
-  margin: 0 2rem;
+  width: ${p => p.heightVal};
+  margin-left: ${p => p.outputWidth + "px"};
   transform: rotate(270deg);
   transform-origin: top left;
-  width: ${p => p.heightVal};
+  margin-top: ${p => p.heightVal};
+  left: 0;
+  top: 0;
   font-family: monospace;
 `;
 
@@ -170,12 +153,12 @@ const RangeOutput = styled.div`
 const StyledRangeSlider = styled.input.attrs({ type: "range" })`
   appearance: none;
   position: relative;
-  margin: 20px 0;
+  margin-top: 20px;
   width: 100%;
   height: 15px;
   border-radius: 15px;
   border: 1px solid ${blackColor};
-  background: transparent;
+  background: white;
   z-index: 1;
   &:focus {
     outline: none;
@@ -230,9 +213,6 @@ const Ticks = styled.div`
   justify-content: space-between;
   margin-right: ${newValue - 100 / 2 * -0.02 + "rem"};
   margin-left: ${newValue - 100 / 2 * -0.02 + "rem"};
-  position: relative;
-  top: -3rem;
-  text-align: right;
 `;
 
 const Tick = styled.div`
@@ -243,7 +223,7 @@ const Tick = styled.div`
   width: 1px;
   background: ${blackColor};
   height: 5px;
-  margin-top: -0.5rem;
+  margin-top: -2.5rem;
   span {
     writing-mode: vertical-rl;
     margin-left: 0.4rem;
