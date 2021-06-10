@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useLayoutEffect, useRef } from "react";
 import styled from 'styled-components';
 
 let focusColor = "";
@@ -8,15 +8,19 @@ let selectedValue = "";
 
 const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, height = "250px", prefix="", suffix="", primaryColor = "black", primaryColor50 }) => {
   const rangeEl = useRef(null);
+  const outputEl = useRef(null);
   const [value, setValue] = useState((min + max) / 2);
   const [isFocused, setIsFocused] = useState(false);
+  const [outputWidth, setOutputWidth] = useState('');
   const factor = (max - min) / 10;
   focusColor = primaryColor;
   blurColor = primaryColor50;
   newValue = Number(((value - min) * 100) / (max - min));
   const newPosition = 10 - newValue * 0.2;
-
-  useEffect(() => {
+  
+  useLayoutEffect(() => {
+    console.log(outputEl.current.clientHeight);
+    setOutputWidth(outputEl.current.clientHeight);
     rangeEl.current.focus();
     if (value > max) {
       setValue(max);
@@ -25,13 +29,9 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
     }
   }, [value, max]);
 
-
-
-
   let markers = [];
   for (let i = min; i <= max; i += step) {
-    const labelLength = i.toString().length;
-    markers.push(<Tick key={i} decimals={decimals} labelLength={labelLength} prefix={prefix} suffix={suffix}><span style={{whiteSpace: "nowrap"}}>{prefix + i.toFixed(decimals) + " " + suffix}</span></Tick>);
+    markers.push(<Tick key={i}><span style={{whiteSpace: "nowrap"}}>{prefix + i.toFixed(decimals) + " " + suffix}</span></Tick>);
   }
   const marks = markers.map(marker => marker);
 
@@ -87,11 +87,12 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   }
 
   return (
-    <RangeWrapWrap heightVal={height}>
+    <RangeWrapWrap outputWidth={outputWidth}>
       <RangeWrap heightVal={height}>
         <RangeOutput
+          ref={outputEl}
           focused={isFocused}
-          style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
+          style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))`}}
           className="range-value"
         >
           {prefix + value.toFixed(decimals) + " " + suffix}
@@ -104,8 +105,9 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           max={max}
           step={step}
           value={value > max ? max : value.toFixed(decimals)}
+          onClick={() => rangeEl.current.focus()}
           onInput={(e) => {
-            rangeEl.current.focus();
+            // rangeEl.current.focus();
             setValue(e.target.valueAsNumber);
           }}
           onKeyDown={handleKeyPress}
@@ -130,18 +132,17 @@ export default VerticalRangeSlider;
 
 const whiteColor = "white";
 const blackColor = "#999";
-
 const RangeWrapWrap = styled.div`
-  /* background: rebeccapurple; */
-  width: 250px;
+  width: ${p => p.outputWidth * 2 + 60 + "px"};
+  padding-left: ${p => p.outputWidth -60 + "px"};
+  height: 100vh;
 `
 const RangeWrap = styled.div`
   position: relative;
   top: ${p => p.heightVal};
-  margin: 0 3rem;
+  margin: 0 2rem;
   transform: rotate(270deg);
   transform-origin: top left;
-  /* background: pink; */
   width: ${p => p.heightVal};
   font-family: monospace;
 `;
@@ -166,41 +167,41 @@ const RangeOutput = styled.div`
 
 const StyledRangeSlider = styled.input.attrs({ type: "range" })`
   appearance: none;
+  position: relative;
   margin: 20px 0;
   width: 100%;
   height: 15px;
   border-radius: 15px;
-  border: 1px solid #000;
-  position: relative;
-  z-index: 1;
+  border: 1px solid ${blackColor};
   background: transparent;
+  z-index: 1;
   &:focus {
     outline: none;
   }
 
   &::-webkit-slider-thumb {
-    /* position: relative; */
     height: 2.2rem;
     width: 2.2rem;
     border-radius: 50%;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
     cursor: pointer;
     -webkit-appearance: none;
     z-index: 50;
     background-color: white;
     background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
+    pointer-events: all;
+    box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
   }
   &::-moz-range-thumb {
-    position: relative;
     height: 2.2rem;
     width: 2.2rem;
     border-radius: 50%;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
     cursor: pointer;
     -webkit-appearance: none;
     z-index: 50;
     background-color: white;
     background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
+    pointer-events: all;
+    box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
   }
   &:focus::-webkit-slider-thumb {
     background: ${p => p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
@@ -245,6 +246,5 @@ const Tick = styled.div`
     writing-mode: vertical-rl;
     margin-left: 0.4rem;
     margin-bottom: 0.5rem;
-    /* margin-bottom: ${p => p.labelLength + p.decimals + p.prefix.length + p.suffix.length + "ch"}; */
   }
 `;
