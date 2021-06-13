@@ -4,9 +4,10 @@ import styled from 'styled-components';
 let focusColor = "";
 let blurColor = "";
 let newValue = "";
+let newPosition = "";
 let selectedValue = "";
 
-const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, height = "250px", prefix="", suffix="", primaryColor = "black", primaryColor50 }) => {
+const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, height = "250px", prefix = "", suffix = "", primaryColor = "black", primaryColor50 }) => {
   const rangeEl = useRef(null);
   const outputEl = useRef(null);
   const [value, setValue] = useState((min + max) / 2);
@@ -15,11 +16,11 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   const factor = (max - min) / 10;
   focusColor = primaryColor;
   blurColor = primaryColor50;
-  newValue = Number(((value - min) * 100) / (max - min));
-  const newPosition = 10 - newValue * 0.2;
-  
+  newValue = ((value - min) * 100) / (max - min);
+  newPosition = 10 - newValue * 0.2;
+
   useLayoutEffect(() => {
-    
+    console.log(outputEl.current);
     setOutputWidth(outputEl.current.clientHeight);
     rangeEl.current.focus();
     if (value > max) {
@@ -37,7 +38,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   let markers = [];
   for (let i = min; i <= max; i += step) {
     // console.log(numberWithCommas(i).length + prefix.length + suffix.length + decimals);
-    markers.push(<Tick key={i}><span style={{whiteSpace: "nowrap", display: "inline-block"}}>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</span></Tick>);
+    markers.push(<Tick key={i}><span style={{ whiteSpace: "nowrap", display: "inline-block" }}>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</span></Tick>);
   }
   const marks = markers.map(marker => marker);
   function handleKeyPress(e) {
@@ -72,14 +73,15 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
         return;
     }
   }
+  console.log(newValue, newPosition);
 
   return (
-    <RangeWrapWrap outputWidth={outputWidth}  heightVal={height}>
+    <RangeWrapWrap outputWidth={outputWidth} heightVal={height}>
       <RangeWrap outputWidth={outputWidth} heightVal={height}>
         <RangeOutput
           ref={outputEl}
           focused={isFocused}
-          style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))`}}
+          style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
           className="range-value"
         >
           {prefix + numberWithCommas(value.toFixed(decimals)) + " " + suffix}
@@ -93,7 +95,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           step={step}
           value={value > max ? max : value.toFixed(decimals)}
           onClick={() => rangeEl.current.focus()}
-          onInput={(e) => {setValue(e.target.valueAsNumber)}}
+          onInput={(e) => { setValue(e.target.valueAsNumber); }}
           onKeyDown={handleKeyPress}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -103,9 +105,9 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           {marks}
         </Ticks>
         <Progress
-          onClick={e => console.log(e)}
           focused={isFocused}
-          style={{ width: `calc(${newValue}% + (${newPosition / 10}rem))` }}
+          // style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
+          style={{ background: `-webkit-linear-gradient(left, #000000 0%,#000000 calc(${newValue}% + (${newPosition / 10}rem)),#ffffff calc(${newValue}% + (${newPosition / 10}rem)),#ffffff 100%)`  }}
         />
       </RangeWrap>
     </RangeWrapWrap>
@@ -114,7 +116,8 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
 
 export default VerticalRangeSlider;
 
-const whiteColor = "#FFF";
+
+const whiteColor = 'white';
 const blackColor = "#999";
 const RangeWrapWrap = styled.div`
   width: ${p => p.outputWidth * 2 + 40 + "px"};
@@ -130,7 +133,7 @@ const RangeWrap = styled.div`
   margin-top: ${p => p.heightVal};
   left: 0;
   top: 0;
-  font-family: monospace;
+  font-family: sans-serif;
 `;
 
 const RangeOutput = styled.div`
@@ -152,8 +155,9 @@ const RangeOutput = styled.div`
 `;
 
 const StyledRangeSlider = styled.input.attrs({ type: "range" })`
+  margin-right: 8rem;
   appearance: none;
-  position: relative;
+  position: absolute;
   margin-top: 20px;
   width: 100%;
   height: 15px;
@@ -164,7 +168,6 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
   &:focus {
     outline: none;
   }
-
   &::-webkit-slider-thumb {
     height: 2.2rem;
     width: 2.2rem;
@@ -199,14 +202,23 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
   }
 `;
 
+// style={{ width: `calc(${newValue}% + (${newPosition / 10}rem))` }}
+
 const Progress = styled.div`
-  background: ${p => p.focused ? focusColor : blurColor};
+  z-index: -1;
+  display: block;
+  /* background: ${p => p.focused ? focusColor : blurColor}; */
+  /* background: -webkit-linear-gradient(left, #000000 0%,#000000 ${newPosition},#ffffff ${newPosition},#ffffff 100%); */
+  width: 100%;
   height: 15px;
-  border-radius: 25px;
+  border: solid 1px #000;
+  border-radius: 15px;
   position: absolute;
   top: 20px;
   cursor: pointer;
-  /* transition: width 0.1s; */
+  box-shadow: inset 1px 1px 2px hsla(0, 0%, 0%, 0.25),
+    inset 0px 0px 2px hsla(0, 0%, 0%, 0.25);
+  transition: all 0.15s ease-out;
 `;
 
 const Ticks = styled.div`
@@ -224,7 +236,6 @@ const Tick = styled.div`
   width: 1px;
   background: ${blackColor};
   height: 5px;
-  margin-top: -2.5rem;
   span {
     writing-mode: vertical-rl;
     margin-left: 0.4rem;
