@@ -13,6 +13,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   const [value, setValue] = useState((min + max) / 2);
   const [isFocused, setIsFocused] = useState(false);
   const [outputWidth, setOutputWidth] = useState('');
+  const [tickWidth, setTickWidth] = useState('');
   const factor = (max - min) / 10;
   focusColor = primaryColor;
   blurColor = primaryColor50;
@@ -20,6 +21,9 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   newPosition = 10 - newValue * 0.2;
 
   useLayoutEffect(() => {
+    console.log(outputEl.current.parentNode.lastChild.lastChild.firstChild);
+    console.log(outputEl.current.parentNode.lastChild.lastChild.firstChild.clientHeight);
+    setTickWidth(outputEl.current.parentNode.lastChild.lastChild.firstChild.clientHeight);
     setOutputWidth(outputEl.current.clientHeight);
     rangeEl.current.focus();
     if (value > max) {
@@ -36,7 +40,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
 
   let markers = [];
   for (let i = min; i <= max; i += step) {
-    markers.push(<Tick key={i}><span style={{ whiteSpace: "nowrap", display: "inline-block" }}>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</span></Tick>);
+    markers.push(<Tick key={i}><span style={{ whiteSpace: "nowrap", display: "block" }}>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</span></Tick>);
   }
   const marks = markers.map(marker => marker);
   function handleKeyPress(e) {
@@ -73,8 +77,8 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   }
 
   return (
-    <RangeWrapWrap outputWidth={outputWidth} heightVal={height}>
-      <RangeWrap outputWidth={outputWidth} heightVal={height}>
+    <RangeWrapWrap outputWidth={outputWidth} tickWidth={tickWidth} heightVal={height}>
+      <RangeWrap tickWidth={tickWidth} heightVal={height}>
         <RangeOutput
           ref={outputEl}
           focused={isFocused}
@@ -98,15 +102,15 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           onBlur={() => setIsFocused(false)}
           focused={isFocused}
         />
-        <Ticks>
-          {marks}
-        </Ticks>
         <Progress
           style={isFocused ?
             { background: `-webkit-linear-gradient(left, ${focusColor} 0%,${focusColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` } :
             { background: `-webkit-linear-gradient(left, ${blurColor} 0%,${blurColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` }
           }
         />
+        <Ticks>
+          {marks}
+        </Ticks>
       </RangeWrap>
     </RangeWrapWrap>
   );
@@ -118,14 +122,16 @@ export default VerticalRangeSlider;
 const whiteColor = 'white';
 const blackColor = "#999";
 const RangeWrapWrap = styled.div`
-  width: ${p => p.outputWidth * 2 + 40 + "px"};
+  width: ${p => console.log(p.tickWidth, p.outputWidth)};
+  width: ${p => p.outputWidth + p.tickWidth + 70 + "px"};
   height: ${p => p.heightVal};
-  /* background: pink; */
+  background: lightyellow;
   border: 1px dashed red;
+  padding-left: 10px;
 `;
 const RangeWrap = styled.div`
   width: ${p => p.heightVal};
-  margin-left: ${p => p.outputWidth - 20 + "px"};
+  margin-left: ${p => (p.tickWidth) + "px"};
   transform: rotate(270deg);
   transform-origin: top left;
   margin-top: ${p => p.heightVal};
@@ -138,7 +144,7 @@ const RangeOutput = styled.div`
   position: absolute;
   margin-top: 3.5rem;
   margin-left: -0.8rem;
-  border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
+  border: ${p => p.focused ? `1px solid ${focusColor}` : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
   color: ${p => p.focused ? whiteColor : blackColor};
   text-align: left;
