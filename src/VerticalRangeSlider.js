@@ -7,6 +7,10 @@ let newValue = "";
 let newPosition = "";
 let selectedValue = "";
 
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, height = "250px", prefix = "", suffix = "", primaryColor = "black", primaryColor50 }) => {
   const rangeEl = useRef(null);
   const outputEl = useRef(null);
@@ -17,8 +21,8 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   const factor = (max - min) / 10;
   focusColor = primaryColor;
   blurColor = primaryColor50;
-  newValue = ((value - min) * 100) / (max - min);
-  newPosition = 10 - newValue * 0.2;
+  newValue =  Number((value - min) * 100) / (max - min);
+  newPosition =  Number(10 - newValue * 0.2);
 
   useLayoutEffect(() => {
     console.log(outputEl.current.parentNode.lastChild.lastChild.firstChild);
@@ -33,14 +37,9 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
     }
   }, [value, max]);
 
-
-  function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-
   let markers = [];
   for (let i = min; i <= max; i += step) {
-    markers.push(<Tick key={i}><span style={{ whiteSpace: "nowrap", display: "block" }}>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</span></Tick>);
+    markers.push(<Tick key={i}><div>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</div></Tick>);
   }
   const marks = markers.map(marker => marker);
   function handleKeyPress(e) {
@@ -102,12 +101,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           onBlur={() => setIsFocused(false)}
           focused={isFocused}
         />
-        <Progress
-          style={isFocused ?
-            { background: `-webkit-linear-gradient(left, ${focusColor} 0%,${focusColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` } :
-            { background: `-webkit-linear-gradient(left, ${blurColor} 0%,${blurColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` }
-          }
-        />
+        <Progress focused={isFocused} />
         <Ticks>
           {marks}
         </Ticks>
@@ -121,8 +115,8 @@ export default VerticalRangeSlider;
 
 const whiteColor = 'white';
 const blackColor = "#999";
+
 const RangeWrapWrap = styled.div`
-  width: ${p => console.log(p.tickWidth, p.outputWidth)};
   width: ${p => p.outputWidth + p.tickWidth + 70 + "px"};
   height: ${p => p.heightVal};
   background: lightyellow;
@@ -148,7 +142,7 @@ const RangeOutput = styled.div`
   background: ${p => p.focused ? focusColor : whiteColor};
   color: ${p => p.focused ? whiteColor : blackColor};
   text-align: left;
-  padding: 0.75rem 0.25rem;
+  padding: 0.25rem 0.25rem;
   font-size: 1rem;
   display: block;
   border-radius: 5px;
@@ -159,42 +153,42 @@ const RangeOutput = styled.div`
 `;
 
 const StyledRangeSlider = styled.input.attrs({ type: "range" })`
-  margin-right: 8rem;
+  cursor: pointer;
   appearance: none;
   position: absolute;
-  margin-top: 20px;
   width: 100%;
   height: 15px;
   border-radius: 15px;
-  border: 1px solid ${blackColor};
   background: transparent;
-  z-index: 1;
+  margin: 20px 0 0 0;
+  border: 1px solid ${blackColor};
   &:focus {
     outline: none;
   }
+
   &::-webkit-slider-thumb {
-    height: 2.2rem;
-    width: 2.2rem;
+    pointer-events: all;
+    position: relative;
+    height: 2.15rem;
+    width: 2.15rem;
     border-radius: 50%;
     cursor: pointer;
     -webkit-appearance: none;
     z-index: 50;
-    background-color: white;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
     background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
-    pointer-events: all;
-    box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
   }
   &::-moz-range-thumb {
-    height: 2.2rem;
-    width: 2.2rem;
+    pointer-events: all;
+    position: relative;
+    height: 2.15rem;
+    width: 2.15rem;
     border-radius: 50%;
     cursor: pointer;
     -webkit-appearance: none;
     z-index: 50;
-    background-color: white;
     background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
-    pointer-events: all;
-    box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
   }
   &:focus::-webkit-slider-thumb {
     background: ${p => p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
@@ -208,17 +202,17 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
 
 const Progress = styled.div`
   z-index: -1;
+  position: absolute;
   display: block;
   width: 100%;
   height: 15px;
-  border: solid 1px #000;
   border-radius: 15px;
-  position: absolute;
   top: 20px;
-  cursor: pointer;
   box-shadow: inset 1px 1px 2px hsla(0, 0%, 0%, 0.25),
     inset 0px 0px 2px hsla(0, 0%, 0%, 0.25);
   transition: all 0.15s ease-out;
+  background: ${p => p.focused ? `-webkit-linear-gradient(left, ${focusColor} 0%,${focusColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` :
+  `-webkit-linear-gradient(left, ${blurColor} 0%,${blurColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)`};
 `;
 
 const Ticks = styled.div`
@@ -236,7 +230,8 @@ const Tick = styled.div`
   width: 1px;
   background: ${blackColor};
   height: 5px;
-  span {
+  div {
+    white-space: nowrap;
     writing-mode: vertical-rl;
     margin-left: 0.4rem;
     margin-bottom: 0.5rem;
