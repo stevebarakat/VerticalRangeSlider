@@ -130,12 +130,19 @@ table {
 
 * {
   box-sizing: border-box;
-  font-size: 16px;
-  -webkit-text-size-adjust: 16px;
-  -ms-text-size-adjust: 16px;
+  -webkit-text-size-adjust: none;
+  -ms-text-size-adjust: none;
 }
 
 body {
-  background: #fff;
+  background: hsla(196, 100%, 48%, 1);
   padding: 2%;
+}
+
+.disable-select {
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }

@@ -5,7 +5,7 @@ import './global.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <div style={{display: 'flex'}}>
+    <div style={{display: 'flex', gap: "3rem"}}>
       <VerticalRangeSlider
         min={0}
         max={500}

@@ -117,11 +117,14 @@ const whiteColor = 'white';
 const blackColor = "#999";
 
 const RangeWrapWrap = styled.div`
-  width: ${p => p.outputWidth + p.tickWidth + 70 + "px"};
-  height: ${p => p.heightVal};
-  background: lightyellow;
-  border: 1px dashed red;
-  padding-left: 10px;
+  width: ${p => p.outputWidth + p.tickWidth + 100 + "px"};
+  height: ${p => p.heightVal + 30};
+  background: lavender;
+  border: 1px solid ${blackColor};
+  box-shadow: 1px 1px 2px hsla(0, 0%, 0%, 0.25),
+    0px 0px 2px hsla(0, 0%, 0%, 0.25);
+  border-radius: 8px;
+  padding: 30px;
 `;
 const RangeWrap = styled.div`
   width: ${p => p.heightVal};
@@ -218,8 +221,8 @@ const Progress = styled.div`
 const Ticks = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-right: ${newValue - 100 / 2 * -0.02 + "rem"};
-  margin-left: ${newValue - 100 / 2 * -0.02 + "rem"};
+  margin-right: 1rem;
+  margin-left: 1rem;
 `;
 
 const Tick = styled.div`
