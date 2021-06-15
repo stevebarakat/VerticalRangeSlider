@@ -21,8 +21,8 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   const factor = (max - min) / 10;
   focusColor = primaryColor;
   blurColor = primaryColor50;
-  newValue =  Number((value - min) * 100) / (max - min);
-  newPosition =  Number(10 - newValue * 0.2);
+  newValue = Number((value - min) * 100) / (max - min);
+  newPosition = Number(10 - newValue * 0.2);
 
   useLayoutEffect(() => {
     console.log(outputEl.current.parentNode.lastChild.lastChild.firstChild);
@@ -82,7 +82,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           ref={outputEl}
           focused={isFocused}
           style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
-          className="range-value"
+          className="disable-select"
         >
           {prefix + numberWithCommas(value.toFixed(decimals)) + " " + suffix}
         </RangeOutput>
@@ -100,6 +100,7 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           focused={isFocused}
+          className="disable-select"
         />
         <Progress focused={isFocused} />
         <Ticks>
@@ -138,6 +139,7 @@ const RangeWrap = styled.div`
 `;
 
 const RangeOutput = styled.div`
+  cursor: default;
   position: absolute;
   margin-top: 3.5rem;
   margin-left: -0.8rem;
@@ -170,24 +172,24 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
   }
 
   &::-webkit-slider-thumb {
+    cursor: grab;
     pointer-events: all;
     position: relative;
     height: 2.15rem;
     width: 2.15rem;
     border-radius: 50%;
-    cursor: pointer;
     -webkit-appearance: none;
     z-index: 50;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
     background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
   }
   &::-moz-range-thumb {
+    cursor: grab;
     pointer-events: all;
     position: relative;
     height: 2.15rem;
     width: 2.15rem;
     border-radius: 50%;
-    cursor: pointer;
     -webkit-appearance: none;
     z-index: 50;
     background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
@@ -215,7 +217,7 @@ const Progress = styled.div`
     inset 0px 0px 2px hsla(0, 0%, 0%, 0.25);
   transition: all 0.15s ease-out;
   background: ${p => p.focused ? `-webkit-linear-gradient(left, ${focusColor} 0%,${focusColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` :
-  `-webkit-linear-gradient(left, ${blurColor} 0%,${blurColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)`};
+    `-webkit-linear-gradient(left, ${blurColor} 0%,${blurColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)`};
 `;
 
 const Ticks = styled.div`
@@ -226,6 +228,7 @@ const Ticks = styled.div`
 `;
 
 const Tick = styled.div`
+  cursor: text;
   display: flex;
   flex-direction: column;
   position: relative;
