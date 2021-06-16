@@ -182,6 +182,7 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     position: relative;
     height: 2.15rem;
     width: 2.15rem;
+    border: none;
     border-radius: 50%;
     -webkit-appearance: none;
     z-index: 50;
@@ -194,11 +195,12 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     position: relative;
     height: 2.15rem;
     width: 2.15rem;
+    border: none;
     border-radius: 50%;
     -webkit-appearance: none;
     z-index: 50;
-    background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
+    background: ${p => !p.focused ? `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)` : `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
   }
 `;
 
