@@ -81,7 +81,8 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
         <RangeOutput
           ref={outputEl}
           focused={isFocused}
-          style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
+          // style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
+          style={{ transform: `translate3d(calc(${newValue}% + ${newPosition * -142.5}% ), 0, 0)` }}
           className="disable-select"
         >
           {prefix + numberWithCommas(value.toFixed(decimals)) + " " + suffix}
@@ -102,7 +103,10 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           focused={isFocused}
           className="disable-select"
         />
-        <Progress focused={isFocused} />
+        <Progress
+          style={{ background: isFocused ? `-webkit-linear-gradient(left, ${focusColor} 0%,${focusColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` :
+            `-webkit-linear-gradient(left, ${blurColor} 0%,${blurColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)`}}
+        />
         <Ticks>
           {marks}
         </Ticks>
@@ -142,12 +146,12 @@ const RangeOutput = styled.div`
   cursor: default;
   position: absolute;
   margin-top: 3.5rem;
-  margin-left: -0.8rem;
+  left: 46.8%;
   border: ${p => p.focused ? `1px solid ${focusColor}` : `1px solid ${blackColor}`};
   background: ${p => p.focused ? focusColor : whiteColor};
   color: ${p => p.focused ? whiteColor : blackColor};
   text-align: left;
-  padding: 0.25rem 0.25rem;
+  padding: 0.25rem;
   font-size: 1rem;
   display: block;
   border-radius: 5px;
@@ -155,6 +159,7 @@ const RangeOutput = styled.div`
   writing-mode: vertical-lr;
   transition: all 0.15s ease-out;
   white-space: nowrap;
+  will-change: transform;
 `;
 
 const StyledRangeSlider = styled.input.attrs({ type: "range" })`
@@ -181,7 +186,7 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     -webkit-appearance: none;
     z-index: 50;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
-    background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
+    background: ${p => !p.focused ? `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)` : `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
   }
   &::-moz-range-thumb {
     cursor: grab;
@@ -195,14 +200,6 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     background: ${p => !p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)`};
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
   }
-  &:focus::-webkit-slider-thumb {
-    background: ${p => p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
-    transition: all 0.15s ease-out;
-  }
-  &:focus::-moz-range-thumb {
-    background: ${p => p.focused && `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
-    transition: all 0.15s ease-out;
-  }
 `;
 
 const Progress = styled.div`
@@ -215,9 +212,6 @@ const Progress = styled.div`
   top: 20px;
   box-shadow: inset 1px 1px 2px hsla(0, 0%, 0%, 0.25),
     inset 0px 0px 2px hsla(0, 0%, 0%, 0.25);
-  transition: all 0.15s ease-out;
-  background: ${p => p.focused ? `-webkit-linear-gradient(left, ${focusColor} 0%,${focusColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` :
-    `-webkit-linear-gradient(left, ${blurColor} 0%,${blurColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)`};
 `;
 
 const Ticks = styled.div`
