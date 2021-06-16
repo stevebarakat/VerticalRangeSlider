@@ -11,7 +11,7 @@ ReactDOM.render(
         max={500}
         step={10}
         decimals={0}
-        height="800px"
+        height="800"
         primaryColor="hsl(196, 100%, 48%)"
         primaryColor50="hsla(196, 100%, 48%, 0.5)"
       />
@@ -20,7 +20,7 @@ ReactDOM.render(
         max={500}
         step={50}
         decimals={0}
-        height="800px"
+        height="800"
         primaryColor="hsl(196, 100%, 48%)"
         primaryColor50="hsla(196, 100%, 48%, 0.5)"
       />
@@ -29,7 +29,7 @@ ReactDOM.render(
         max={10100}
         step={500}
         decimals={2}
-        height="800px"
+        height="800"
         prefix="$"
         primaryColor="hsl(196, 100%, 48%)"
         primaryColor50="hsla(196, 100%, 48%, 0.5)"
@@ -39,7 +39,7 @@ ReactDOM.render(
         max={10000}
         step={1000}
         decimals={0}
-        height="800px"
+        height="800"
         suffix="Gallons"
         primaryColor="hsl(196, 100%, 48%)"
         primaryColor50="hsla(196, 100%, 48%, 0.5)"

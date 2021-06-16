@@ -9,9 +9,16 @@ let selectedValue = "";
 
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+};
 
-const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, height = "250px", prefix = "", suffix = "", primaryColor = "black", primaryColor50 }) => {
+function calcSpacingUnit(max, min, height){
+  const diff = min - max;
+  const ticks = height / 50;
+  console.log(diff, ticks)
+  return diff / ticks;
+};
+
+const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, height = "250", prefix = "", suffix = "", primaryColor = "black", primaryColor50 }) => {
   const rangeEl = useRef(null);
   const outputEl = useRef(null);
   const [value, setValue] = useState((min + max) / 2);
@@ -25,9 +32,9 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   newPosition = Number(10 - newValue * 0.2);
 
   useLayoutEffect(() => {
-    console.log(outputEl.current.parentNode.lastChild.lastChild.firstChild);
-    console.log(outputEl.current.parentNode.lastChild.lastChild.firstChild.clientHeight);
-    setTickWidth(outputEl.current.parentNode.lastChild.lastChild.firstChild.clientHeight);
+    console.log(outputEl.current.parentNode.lastChild?.firstChild);
+    console.log(outputEl.current.parentNode.lastChild.lastChild?.firstChild.clientHeight);
+    setTickWidth(outputEl.current.parentNode.lastChild.lastChild?.firstChild.clientHeight);
     setOutputWidth(outputEl.current.clientHeight);
     rangeEl.current.focus();
     if (value > max) {
@@ -38,9 +45,18 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   }, [value, max]);
 
   let markers = [];
-  for (let i = min; i <= max; i += step) {
+  // for (let i = min; i <= max; i += step) {
+  //   markers.push(<Tick key={i}><div>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</div></Tick>);
+  // };
+
+
+  const su = calcSpacingUnit(min, max, height);
+  console.log(su)
+
+  for (let i = min; i <= max; i += su) {
     markers.push(<Tick key={i}><div>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</div></Tick>);
-  }
+  };
+  
   const marks = markers.map(marker => marker);
   function handleKeyPress(e) {
     rangeEl.current.focus();
@@ -81,7 +97,6 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
         <RangeOutput
           ref={outputEl}
           focused={isFocused}
-          // style={{ left: `calc(${newValue}% + (${newPosition / 10}rem))` }}
           style={{ transform: `translate3d(calc(${newValue}% + ${newPosition * -142.5}% ), 0, 0)` }}
           className="disable-select"
         >
@@ -123,7 +138,7 @@ const blackColor = "#999";
 
 const RangeWrapWrap = styled.div`
   width: ${p => p.outputWidth + p.tickWidth + 100 + "px"};
-  height: ${p => p.heightVal + 30};
+  height: ${p => p.heightVal + "px" + 30};
   background: lavender;
   border: 1px solid ${blackColor};
   box-shadow: 1px 1px 2px hsla(0, 0%, 0%, 0.25),
@@ -132,11 +147,11 @@ const RangeWrapWrap = styled.div`
   padding: 30px;
 `;
 const RangeWrap = styled.div`
-  width: ${p => p.heightVal};
+  width: ${p => p.heightVal + "px"};
   margin-left: ${p => (p.tickWidth) + "px"};
   transform: rotate(270deg);
   transform-origin: top left;
-  margin-top: ${p => p.heightVal};
+  margin-top: ${p => p.heightVal + "px"};
   left: 0;
   top: 0;
   font-family: sans-serif;
