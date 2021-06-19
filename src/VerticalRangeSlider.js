@@ -92,9 +92,9 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0,
           ref={outputEl}
           focused={isFocused}
           className="disable-select"
-          style={{ transform: `translate3d(calc(${newValue}% + ${newPosition * -142.5}% ), 0, 0)` }}
+          style={{ transform: `translate3d(calc(${newValue * 99}% + ${newPosition * 0.1}em), 0, 0)` }}
         >
-          {prefix + numberWithCommas(value.toFixed(decimals)) + " " + suffix}
+          <span>{prefix + numberWithCommas(value.toFixed(decimals)) + " " + suffix}</span>
         </RangeOutput>
         <StyledRangeSlider
           heightVal={height}
@@ -155,22 +155,23 @@ const RangeWrap = styled.div`
 `;
 
 const RangeOutput = styled.div`
-  cursor: default;
+  width: 1%;
   position: absolute;
+  display: flex;
+  justify-content: center;
   margin-top: 3.5rem;
-  left: 46.8%;
-  border: ${p => p.focused ? `1px solid ${focusColor}` : `1px solid ${blackColor}`};
-  background: ${p => p.focused ? focusColor : whiteColor};
-  color: ${p => p.focused ? whiteColor : blackColor};
-  text-align: left;
-  padding: 0.25rem;
+  text-align: center;
   font-size: 1rem;
-  display: block;
-  border-radius: 5px;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
-  writing-mode: vertical-lr;
   transition: all 0.15s ease-out;
-  white-space: nowrap;
+  span{
+    writing-mode: vertical-lr;
+    border: ${p => p.focused ? "none" : `1px solid ${blackColor}`};
+    border-radius: 5px;
+    color: ${p => p.focused ? whiteColor : blackColor};
+    background: ${p => p.focused ? focusColor : whiteColor};
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
+    padding: 0.25rem 0.5rem;
+  }
 `;
 
 const StyledRangeSlider = styled.input.attrs({ type: "range" })`

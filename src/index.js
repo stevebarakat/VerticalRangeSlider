@@ -7,15 +7,15 @@ ReactDOM.render(
   <React.StrictMode>
     <div style={{display: 'flex', gap: "3rem"}}>
       <VerticalRangeSlider
-        min={0}
-        max={500}
+        min={-200}
+        max={5100}
         step={10}
         decimals={0}
-        height="800"
+        height="400"
         primaryColor="hsl(196, 100%, 48%)"
         primaryColor50="hsla(196, 100%, 48%, 0.5)"
       />
-      <VerticalRangeSlider
+      {/* <VerticalRangeSlider
         min={-500}
         max={500}
         step={50}
@@ -43,7 +43,7 @@ ReactDOM.render(
         suffix="Gallons"
         primaryColor="hsl(196, 100%, 48%)"
         primaryColor50="hsla(196, 100%, 48%, 0.5)"
-      />
+      /> */}
     </div>
   </React.StrictMode>,
   document.getElementById('root')
