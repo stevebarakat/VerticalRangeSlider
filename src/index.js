@@ -9,9 +9,9 @@ ReactDOM.render(
       <VerticalRangeSlider
         min={-200}
         max={5100}
-        step={10}
+        step={100}
         decimals={0}
-        height="400"
+        height="1200"
         primaryColor="hsl(196, 100%, 48%)"
         primaryColor50="hsla(196, 100%, 48%, 0.5)"
       />
