@@ -14,13 +14,14 @@ function numberWithCommas(x) {
 function calcSpacingUnit(max, min, height){
   const diff = min - max;
   const ticks = height / 50;
-  console.log(diff, ticks)
   return diff / ticks;
 };
 
-const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, height = "250", prefix = "", suffix = "", primaryColor = "black", primaryColor50 }) => {
+const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, 
+  height = "250", prefix = "", suffix = "", primaryColor = "black", primaryColor50 }) => {
   const rangeEl = useRef(null);
   const outputEl = useRef(null);
+  const tickEl = useRef(null);
   const [value, setValue] = useState((min + max) / 2);
   const [isFocused, setIsFocused] = useState(false);
   const [outputWidth, setOutputWidth] = useState('');
@@ -32,11 +33,10 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   newPosition = Number(10 - newValue * 0.2);
 
   useLayoutEffect(() => {
-    console.log(outputEl.current.parentNode.lastChild?.firstChild);
-    console.log(outputEl.current.parentNode.lastChild.lastChild?.firstChild.clientHeight);
-    setTickWidth(outputEl.current.parentNode.lastChild.lastChild?.firstChild.clientHeight);
+    setTickWidth(tickEl.current.clientHeight);
     setOutputWidth(outputEl.current.clientHeight);
     rangeEl.current.focus();
+    tickEl.current.focus();
     if (value > max) {
       setValue(max);
     } else {
@@ -45,16 +45,10 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
   }, [value, max]);
 
   let markers = [];
-  // for (let i = min; i <= max; i += step) {
-  //   markers.push(<Tick key={i}><div>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</div></Tick>);
-  // };
-
-
   const su = calcSpacingUnit(min, max, height);
-  console.log(su)
 
   for (let i = min; i <= max; i += su) {
-    markers.push(<Tick key={i}><div>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</div></Tick>);
+    markers.push(<Tick key={i}><div ref={tickEl}>{prefix + numberWithCommas(i.toFixed(decimals)) + " " + suffix}</div></Tick>);
   };
   
   const marks = markers.map(marker => marker);
@@ -97,8 +91,8 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
         <RangeOutput
           ref={outputEl}
           focused={isFocused}
-          style={{ transform: `translate3d(calc(${newValue}% + ${newPosition * -142.5}% ), 0, 0)` }}
           className="disable-select"
+          style={{ transform: `translate3d(calc(${newValue}% + ${newPosition * -142.5}% ), 0, 0)` }}
         >
           {prefix + numberWithCommas(value.toFixed(decimals)) + " " + suffix}
         </RangeOutput>
@@ -119,8 +113,11 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0, heigh
           className="disable-select"
         />
         <Progress
-          style={{ background: isFocused ? `-webkit-linear-gradient(left, ${focusColor} 0%,${focusColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` :
-            `-webkit-linear-gradient(left, ${blurColor} 0%,${blurColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)`}}
+          style={{ background: isFocused ? 
+          `-webkit-linear-gradient(left, ${focusColor} 0%,${focusColor} calc(${newValue}% + 
+          (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)` :
+            `-webkit-linear-gradient(left, ${blurColor} 0%,${blurColor} calc(${newValue}% + 
+            (${newPosition / 10}rem)),${whiteColor} calc(${newValue}% + (${newPosition / 10}rem)),${whiteColor} 100%)`}}
         />
         <Ticks>
           {marks}
@@ -174,7 +171,6 @@ const RangeOutput = styled.div`
   writing-mode: vertical-lr;
   transition: all 0.15s ease-out;
   white-space: nowrap;
-  will-change: transform;
 `;
 
 const StyledRangeSlider = styled.input.attrs({ type: "range" })`
@@ -202,7 +198,9 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     -webkit-appearance: none;
     z-index: 50;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
-    background: ${p => !p.focused ? `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)` : `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
+    background: ${p => !p.focused ? 
+    `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)` : 
+    `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
   }
   &::-moz-range-thumb {
     cursor: grab;
@@ -215,7 +213,9 @@ const StyledRangeSlider = styled.input.attrs({ type: "range" })`
     -webkit-appearance: none;
     z-index: 50;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 1);
-    background: ${p => !p.focused ? `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)` : `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
+    background: ${p => !p.focused ? 
+    `-webkit-radial-gradient(center, ellipse cover,  ${focusColor} 0%,${focusColor} 35%,${whiteColor} 40%,${whiteColor} 100%)` : 
+    `-webkit-radial-gradient(center, ellipse cover,  ${whiteColor} 0%,${whiteColor} 35%,${focusColor} 40%,${focusColor} 100%)`};
   }
 `;
 
