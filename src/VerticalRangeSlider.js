@@ -92,9 +92,10 @@ const VerticalRangeSlider = ({ min = 0, max = 100, decimals = 0, step = 0,
           ref={outputEl}
           focused={isFocused}
           className="disable-select"
-          // style={{ transform: `translate3d(calc(${newValue * 99}% + ${newPosition * 0.1}em), 0, 0)` }}
-          style={{ transform: `translate3d(${newValue * 99.5 + (newPosition * 100) / 7.5}%, 0, 0)` }}
-          // style={{ left: `${newValue}%` }}
+          style={{ 
+            transform: `translate3d(${newValue * 99}%, 0, 0)`,
+            left: `${newPosition}px`
+          }}
         >
           <span>{prefix + numberWithCommas(value.toFixed(decimals)) + " " + suffix}</span>
         </RangeOutput>
@@ -172,7 +173,7 @@ const RangeOutput = styled.div`
     color: ${p => p.focused ? whiteColor : blackColor};
     background: ${p => p.focused ? focusColor : whiteColor};
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem 0.25rem;
   }
 `;
 

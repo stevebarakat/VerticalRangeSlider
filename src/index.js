@@ -11,7 +11,7 @@ ReactDOM.render(
         max={5100}
         step={100}
         decimals={0}
-        height="1200"
+        height="500"
         primaryColor="hsl(196, 100%, 48%)"
         primaryColor50="hsla(196, 100%, 48%, 0.5)"
       />
